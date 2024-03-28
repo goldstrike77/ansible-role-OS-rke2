@@ -1,0 +1,15 @@
+---
+- name: Include tasks for specific Linux release.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/{{ ansible_distribution_file_variety }}.yml"
+
+- name: Include configuration tasks.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/configuration.yml"
+
+- name: Include firewall tasks.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/network.yml"
+
+- name: Include containerd tasks.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/containerd.yml"
+
+- name: Force the handler to run immediately.
+  meta: flush_handlers

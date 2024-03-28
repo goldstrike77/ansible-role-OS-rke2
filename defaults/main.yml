@@ -1,0 +1,97 @@
+---
+# General parameters #
+rke2_is_install: false # A boolean to determine whether or not to install the RKE Government.
+rke2_version: "1.24.17" # Specify the Kubernetes version.
+rke2_node_role: "node" # Type of nodes in cluster, master or node.
+rke2_cloud_provider_external: false # A boolean to determine whether or not to specify that the cloud-provider is external.
+#kube_skip_phases: # Allow skipping a list of phases during kubeadm init/join command execution.
+#  - 'addon/kube-proxy'
+#kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
+#kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
+#kube_node_extra_labels: # Defined node labels.
+#  - 'kubernetes.azure.com/cluster=""'
+#  - 'longhorn/node=true'
+
+# Container Network Interface parameters #
+rke2_cni:
+  enable: true # A boolean to determine whether or not to install the Container Network Interface.
+  provider: "flannel" # Specify the Kubernetes CNI plugins.
+  pod_cidr: "10.244.0.0/16" # Specify range of IP addresses for the pod network.
+  srv_cidr: "10.96.0.0/12" # Use alternative range of IP address for service VIPs.
+
+# Container Runtime Interface parameters #
+containerd:
+  path: "/data" # Specify containerd root directory.
+
+# Kubelet parameters #
+kube_kubelet: # Specify the Kubelet's configuration parameters.
+  clustername: "kubernetes"
+  clusterdomain: "cluster.local"
+  kubeapiburst: 20
+  kubeapiqps: 15
+  logmaxfiles: "10"
+  logmaxsize: "20Mi"
+  imagegchighthresholdpercent: "70"
+  imagegclowthresholdpercent: "50"
+  maxpods: "110"
+  serializeimagepulls: false
+  unsafesysctls:
+    - "net.core.somaxconn"
+    - "net.ipv4.ip_local_port_range"
+
+# Auditing parameters #
+kube_audit: # Specify the auditing configuration parameters.
+  logmaxage: "20"
+  logmaxbackup: "10"
+  logmaxsize: "100"
+  logtruncatemaxbatchsize: "32768"
+  logtruncatemaxeventsize: "32768"
+
+# Backup parameters #
+kube_backupset_arg:
+  keep: "5" # Backup retention cycle in days.
+  cloud_rsync: false # Whether rsync for cloud storage.
+  cloud_drive: "azureblob" # Specify the cloud storage providers, azureblob / s3 for minio.
+  cloud_bwlimit: "10M" # Controls the bandwidth limit.
+  cloud_event: "sync" # Define transfer events.
+  cloud_config: # Specify the cloud storage configuration.
+    # azureblob #
+    account: "blobuser" # Storage Account Name.
+    key: "base64encodedkey==" # Storage Account Key.
+    endpoint: "blob.core.chinacloudapi.cn" # Endpoint for the service.
+# s3 #
+#    access_key: 'JPTNJFUFB6UKLUXMRKZT'
+#    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
+#    endpoint: 'https://demo-storage-production-other-minio.service.dc01.local:9001'
+
+# Components #
+#kube_components: # Individual Kubernetes components.
+#  - 'dashboard'
+#  - 'metrics-server'
+
+# Registry Endpoint #
+#kube_registry_mirrors: # Specify the image registry mirrors for containerd.
+#  quay:
+#    - 'https://quay.mirrors.ustc.edu.cn'
+#  dockerio:
+#    - 'https://mirror.baidubce.com'
+#    - 'https://hub-mirror.c.163.com'
+
+# Service Mesh #
+environments: "prd" # Define the service environment.
+datacenter: "dc01" # Define the DataCenter.
+domain: "local" # Define the Domain.
+customer: "demo" # Define the customer name.
+#tags: # Define the service custom label.
+#  subscription: 'default'
+#  owner: 'nobody'
+#  department: 'Infrastructure'
+#  organization: 'The Company'
+#  region: 'China'
+exporter_is_install: false # Whether to install prometheus exporter.
+consul_public_register: false # Whether register a exporter service with public consul client.
+consul_public_exporter_token: "00000000-0000-0000-0000-000000000000" # Public Consul client ACL token.
+consul_public_http_prot: "https" # The consul Hypertext Transfer Protocol.
+consul_public_http_port: "8500" # The consul HTTP API port.
+consul_public_clients: # List of public consul clients.
+  - "127.0.0.1"

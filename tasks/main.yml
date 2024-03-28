@@ -1,0 +1,6 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_system }}.yml"
+
+- name: Include tasks for specific Operating System.
+  ansible.builtin.include_tasks: "{{ ansible_system }}.yml"
