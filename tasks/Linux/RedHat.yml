@@ -11,3 +11,14 @@
     gpgcheck: "no"
     sslverify: "no"
     timeout: "60"
+
+- name: Add Rancher Kubernetes Engine v2 YUM repositories.
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.name }} repo"
+    file: "{{ rke2_repo_name }}"
+    baseurl: "{{ item.url }}"
+    sslverify: "no"
+    gpgcheck: "no"
+    timeout: "60"
+  loop: "{{ rke2_repo_url }}"

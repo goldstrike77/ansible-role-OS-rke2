@@ -10,3 +10,23 @@
   systemd:
     name: "NetworkManager.service"
     state: "reloaded"
+
+- name: Reloading the Server service.
+  systemd:
+    name: "rke2-server.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  when: rke2_node_role == "server"
+  async: 1
+  poll: 0
+
+- name: Reloading the Agent service.
+  systemd:
+    name: "rke2-agent.service"
+    enabled: "yes"
+    state: "restarted"
+    daemon_reload: "yes"
+  when: rke2_node_role == "agent"
+  async: 1
+  poll: 0

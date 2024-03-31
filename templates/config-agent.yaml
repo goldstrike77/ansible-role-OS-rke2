@@ -1,0 +1,21 @@
+# Common
+debug: {{ rke2_debug | default(false) | bool }}
+data-dir: "{{ rke2_data_dir }}/rke2"
+
+# Cluster
+token: '{{ lookup("password", "" + rke2_servers[0] + ":rke2 length=16 chars=ascii_letters,digits") }}'
+server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rke2_servers[0] }}{% endif %}:9345"
+
+# Components
+{% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 0 %}
+kubelet-arg:
+{% for item in rke2_kubelet_arg %}
+  - "{{ item }}"
+{% endfor %}
+{% endif %}
+
+# Security
+profile: cis
+
+# Node
+protect-kernel-defaults: true

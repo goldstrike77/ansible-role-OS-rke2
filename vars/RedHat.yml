@@ -4,8 +4,16 @@ rke2_cri_containerd_repo_url: "http://mirrors.aliyun.com/docker-ce/linux/centos/
 rke2_cri_containerd_packages:
   - "containerd.io"
 
+rke2_repo_name: "rancher-rke2"
+rke2_repo_url:
+  - { name: "rancher-rke2-common-stable", url: "http://rpm.rancher.io/rke2/stable/common/centos/$releasever/noarch" }
+  - { name: "rancher-rke2-{{ rke2_version.split('.')[0] }}.{{ rke2_version.split('.')[1] }}", url: "http://rpm.rancher.io/rke2/stable/{{ rke2_version.split('.')[0] }}.{{ rke2_version.split('.')[1] }}/centos/$releasever/x86_64/" }
+
 rke2_packages:
-  - "ipvsadm"
-  - "iproute-tc"
-  - "iscsi-initiator-utils"
-  - "nfs-utils"
+- { name: "ipvsadm" }
+- { name: "iproute-tc" }
+- { name: "iscsi-initiator-utils" }
+- { name: "nfs-utils" }
+- { name: "rke2-server-{{ rke2_version }}*", create: '{{ rke2_node_role | lower == "server" }}' }
+- { name: "rke2-agent-{{ rke2_version }}*", create: '{{ rke2_node_role | lower == "agent" }}' }
+- { name: "rke2-selinux" }

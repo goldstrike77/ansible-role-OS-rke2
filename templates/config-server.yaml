@@ -1,0 +1,92 @@
+# Common
+debug: {{ rke2_debug | default(false) | bool }}
+data-dir: "{{ rke2_data_dir }}/rke2"
+
+# Listener
+tls-san:
+{% for item in rke2_servers %}
+  - "{{ item }}"
+{% endfor %}
+{% if rke2_server is defined %}
+  - "{{ rke2_server }}"
+{% endif %}
+
+# Networking
+cluster-cidr: {{ rke2_cni.pod_cidr | default("10.42.0.0/16") }}
+service-cidr: {{ rke2_cni.srv_cidr | default("10.43.0.0/16") }}
+cluster-domain: "{{ rke2_cluster_domain | default('cluster.local') }}"
+egress-selector-mode: "{{ rke2_egress_selector_mode | default('agent') }}"
+cni: "{{ rke2_cni.provider | default('cilium') }}"
+
+# Client
+write-kubeconfig: "/etc/rancher/rke2/rke2.yaml"
+write-kubeconfig-mode: "0600"
+
+# Cluster
+token: '{{ lookup("password", "" + rke2_servers[0] + ":rke2 length=16 chars=ascii_letters,digits") }}'
+{% if rke2_servers[0] not in ansible_default_ipv4.address %}
+server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rke2_servers[0] }}{% endif %}:9345"
+{% endif %}
+
+# Database
+etcd-expose-metrics: true
+etcd-snapshot-schedule-cron: "{{ ( rke2_servers[0] | hash | list | map('int',0,16) | sum ) % 60 }} * * * *"
+etcd-snapshot-retention: {{ rke2_backup_arg.keep | default(5) }}
+etcd-snapshot-dir: "{{ rke2_data_dir }}/snapshots"
+{% if rke2_backup_arg.s3 | bool %}
+etcd-s3: true
+etcd-s3-endpoint: "{{ rke2_backup_arg.endpoint }}"
+etcd-s3-skip-ssl-verify: true
+etcd-s3-access-key: "{{ rke2_backup_arg.access_key }}"
+etcd-s3-secret-key: "{{ rke2_backup_arg.secret_key }}"
+etcd-s3-bucket: "{{ rke2_backup_arg.bucket }}"
+etcd-s3-region: "{{ rke2_backup_arg.region | default('us-east-1') }}"
+etcd-s3-folder:	"{{ rke2_backup_arg.folder }}"
+etcd-s3-insecure: {{ rke2_backup_arg.insecure | default(false) | bool }}
+etcd-s3-timeout: {{ rke2_backup_arg.timeout | default("5m0s") }}
+{% endif %}
+
+# Flags
+kube-apiserver-arg:
+  - audit-log-maxage=20
+  - audit-log-maxbackup=20
+  - audit-log-maxsize=100
+  - audit-log-truncate-enabled=true
+  - audit-log-truncate-max-batch-size=32768
+  - audit-log-truncate-max-event-size=32768
+etcd-arg:
+  - quota-backend-bytes=8589934592
+kube-controller-manager-arg:
+  - bind-address=0.0.0.0
+kube-scheduler-arg:
+  - bind-address=0.0.0.0
+
+# Components
+disable-kube-proxy: {{ rke2_disable_kube_proxy | default(false) | bool }}
+disable-cloud-controller: {{ rke2_disable_cloud_controller | default(false) | bool }}
+disable:
+{% if rke2_disable is defined %}
+{% for item in rke2_disable %}
+  - "{{ item }}"
+{% endfor %}
+{% endif%}
+
+# Security
+profile: cis
+
+# Agent/Node
+protect-kernel-defaults: true
+
+# Agent/Runtime
+system-default-registry: "{{ rke2_system_default_registry }}"
+
+# Agent/Flags
+kube-proxy-arg:
+  - proxy-mode=ipvs
+  - ipvs-strict-arp=true
+{% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 0 %}
+kubelet-arg:
+{% for item in rke2_kubelet_arg %}
+  - "{{ item }}"
+{% endfor %}
+{% endif %}

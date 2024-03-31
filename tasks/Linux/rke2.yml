@@ -1,0 +1,57 @@
+---
+- name: Create the etcd group.
+  group:
+    name: "etcd"
+  when: rke2_node_role == "server"
+
+- name: Create the etcd user.
+  user:
+    name: "etcd"
+    group: "etcd"
+    shell: "/sbin/nologin"
+  when: rke2_node_role == "server"
+
+- name: Install the Rancher Kubernetes Engine v2 packages.
+  package:
+    name: "{{ item.name }}"
+    state: "present"
+    validate_certs: "no"
+    disable_gpg_check: "yes"
+  loop: "{{ rke2_packages }}"
+  when: item.create | default(true) | bool
+  register: package_status
+  until: package_status is succeeded
+  retries: 5
+  delay: 2
+
+- name: Transfer API Server audit configuration file.
+  copy:
+    src: "audit-policy.yaml"
+    dest: "/etc/rancher/rke2/audit-policy.yaml"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  when: rke2_node_role == "server"
+  notify: Reloading the Server service.
+
+- name: Transfer server configuration file.
+  template:
+    owner: "root"
+    group: "root"
+    mode: "0600"
+    force: "yes"
+    src: "config-server.yaml"
+    dest: "/etc/rancher/rke2/config.yaml"
+  when: rke2_node_role == "server"
+  notify: Reloading the Server service.
+
+- name: Transfer agent configuration file.
+  template:
+    owner: "root"
+    group: "root"
+    mode: "0600"
+    force: "yes"
+    src: "config-agent.yaml"
+    dest: "/etc/rancher/rke2/config.yaml"
+  when: rke2_node_role == "agent"
+  notify: Reloading the Agent service.

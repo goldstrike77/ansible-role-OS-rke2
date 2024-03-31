@@ -3,16 +3,14 @@
   service_facts:
   register: services_state
 
-- name: NetworkManager operation.
-  block:
-    - name: Copy NetworkManager configuration file.
-      copy:
-        src: "rke2-canal.conf"
-        dest: "/etc/NetworkManager/conf.d/rke2-canal.conf"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      notify: Reloading the Containerd service.
+- name: Transfer NetworkManager configuration file.
+  copy:
+    src: "rke2-canal.conf"
+    dest: "/etc/NetworkManager/conf.d/rke2-canal.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: Reloading the Containerd service.
   when:
     - services_state.ansible_facts.services["NetworkManager.service"] is defined
     - services_state.ansible_facts.services["NetworkManager.service"].state == 'running'
@@ -27,7 +25,7 @@
         state: "enabled"
         immediate: "true"
       loop: "{{ rke2_server_network_rules_arg }}"
-      when: rke2_node_role == "master"
+      when: rke2_node_role == "server"
     - name: Allow Kubernetes node traffic.
       firewalld:
         port: "{{ item.port }}/{{ item.protocol }}"

@@ -1,43 +1,30 @@
 ---
 # General parameters #
-rke2_is_install: false # A boolean to determine whether or not to install the RKE Government.
-rke2_version: "1.24.17" # Specify the Kubernetes version.
-rke2_node_role: "node" # Type of nodes in cluster, master or node.
-rke2_cloud_provider_external: false # A boolean to determine whether or not to specify that the cloud-provider is external.
-#kube_skip_phases: # Allow skipping a list of phases during kubeadm init/join command execution.
-#  - 'addon/kube-proxy'
-#kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
-#kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
-#kube_node_extra_labels: # Defined node labels.
+rke2_is_install: false # A boolean to determine whether or not to install the Rancher Kubernetes Engine v2.
+rke2_version: "1.27.12" # Specify the Rancher Kubernetes Engine v2 version.
+rke2_node_role: "agent" # Type of nodes in cluster, server or agent.
+rke2_debug: false # A boolean to determine whether or not to turn on debug logs.
+rke2_data_dir: "/data" # Folder to hold state.
+rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
+rke2_egress_selector_mode: "agent" # Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
+rke2_disable_kube_proxy: false # Disable running kube-proxy.
+rke2_disable_cloud_controller: true # Disable rke2 default cloud controller manager.
+rke2_disable: # Disable deploy packaged components, valid items: rke2-coredns, rke2-ingress-nginx, rke2-metrics-server.
+  - "rke2-ingress-nginx"
+#rke2_server: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
+#rke2_node_extra_labels: # Defined node labels.
 #  - 'kubernetes.azure.com/cluster=""'
 #  - 'longhorn/node=true'
 
 # Container Network Interface parameters #
 rke2_cni:
-  enable: true # A boolean to determine whether or not to install the Container Network Interface.
-  provider: "flannel" # Specify the Kubernetes CNI plugins.
-  pod_cidr: "10.244.0.0/16" # Specify range of IP addresses for the pod network.
-  srv_cidr: "10.96.0.0/12" # Use alternative range of IP address for service VIPs.
-
-# Container Runtime Interface parameters #
-containerd:
-  path: "/data" # Specify containerd root directory.
+  provider: "calico" # Specify the Kubernetes CNI plugins, one of none, calico, canal, cilium.
+  pod_cidr: "10.42.0.0/16" # Specify range of IP addresses for the pod network.
+  srv_cidr: "10.43.0.0/16" # Use alternative range of IP address for service VIPs.
 
 # Kubelet parameters #
-kube_kubelet: # Specify the Kubelet's configuration parameters.
-  clustername: "kubernetes"
-  clusterdomain: "cluster.local"
-  kubeapiburst: 20
-  kubeapiqps: 15
-  logmaxfiles: "10"
-  logmaxsize: "20Mi"
-  imagegchighthresholdpercent: "70"
-  imagegclowthresholdpercent: "50"
-  maxpods: "110"
-  serializeimagepulls: false
-  unsafesysctls:
-    - "net.core.somaxconn"
-    - "net.ipv4.ip_local_port_range"
+rke2_kubelet_arg: [] # Specify the Kubelet's configuration parameters.
+#  - "cloud-provider=external"
 
 # Auditing parameters #
 kube_audit: # Specify the auditing configuration parameters.
@@ -48,21 +35,16 @@ kube_audit: # Specify the auditing configuration parameters.
   logtruncatemaxeventsize: "32768"
 
 # Backup parameters #
-kube_backupset_arg:
-  keep: "5" # Backup retention cycle in days.
-  cloud_rsync: false # Whether rsync for cloud storage.
-  cloud_drive: "azureblob" # Specify the cloud storage providers, azureblob / s3 for minio.
-  cloud_bwlimit: "10M" # Controls the bandwidth limit.
-  cloud_event: "sync" # Define transfer events.
-  cloud_config: # Specify the cloud storage configuration.
-    # azureblob #
-    account: "blobuser" # Storage Account Name.
-    key: "base64encodedkey==" # Storage Account Key.
-    endpoint: "blob.core.chinacloudapi.cn" # Endpoint for the service.
-# s3 #
-#    access_key: 'JPTNJFUFB6UKLUXMRKZT'
-#    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
-#    endpoint: 'https://demo-storage-production-other-minio.service.dc01.local:9001'
+rke2_backup_arg:
+  s3: false # Enable backup to S3.
+  endpoint: "" # S3 endpoint url.
+  retention: "5" # Number of snapshots to retain for days.
+  access_key: "JPTNJFUFB6UKLUXMRKZT" # S3 access key.
+  secret_key: "h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i" # S3 secret key.
+  bucket: "backup" # S3 bucket name.
+  region: "us-east-1" # S3 region / bucket location.
+  folder: "rke2" # S3 folder.
+  insecure: false # Disables S3 over HTTPS.
 
 # Components #
 #kube_components: # Individual Kubernetes components.

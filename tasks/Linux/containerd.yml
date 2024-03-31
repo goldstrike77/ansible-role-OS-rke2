@@ -1,7 +1,7 @@
 ---
 - name: Create Containerd image directory.
   file:
-    path: "{{ containerd.path }}/containerd/logs"
+    path: "{{ rke2_data_dir }}/containerd/logs"
     state: "directory"
     owner: "root"
     group: "root"
@@ -9,7 +9,7 @@
 
 - name: Create containerd logs symbolic link.
   file:
-    src: "{{ containerd.path }}/containerd/logs"
+    src: "{{ rke2_data_dir }}/containerd/logs"
     dest: "/var/log/pods"
     state: "link"
 
@@ -25,7 +25,7 @@
   delay: 2
   notify: Reloading the Containerd service.
 
-- name: Containerd configureation.
+- name: Transfer Containerd configuration file.
   template:
     owner: "root"
     group: "root"

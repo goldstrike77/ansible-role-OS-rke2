@@ -24,7 +24,7 @@ rke2_network_rules_arg:
   - { protocol: "udp", port: "4789" } # Flannel CNI with VXLAN
   - { protocol: "tcp", port: "1338" } # Containerd exporter.
 
-rke2_module_dependent:
+rke2_module_dependents:
   - "br_netfilter"
   - "ip_vs"
   - "ip_vs_rr"
@@ -51,13 +51,17 @@ rke2_kernel_parameters:
   - { variable: "net.ipv4.neigh.default.gc_thresh3", value: "8192" }
   - { variable: "net.ipv6.conf.all.forwarding", value: "1", create: "{{ ansible_all_ipv6_addresses | length > 0 }}" }
   - { variable: "vm.max_map_count", value: "262144" }
+  - { variable: "vm.panic_on_oom", value: "0" }
+  - { variable: "vm.overcommit_memory", value: "1" }
+  - { variable: "kernel.panic", value: "10" }
+  - { variable: "kernel.panic_on_oops", value: "1" }
 
 rke2_servers: "\
-  {% set _kube_servers = [] %}\
+  {% set _rke2_servers = [] %}\
   {% for host in groups[group_names[0]] %}\
-  {% set _kube_node_role = hostvars[host]['kube_node_role'] | default('node', true) %}\
-  {% if ( _kube_node_role == 'master') %}\
-  {% if _kube_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+  {% set _rke2_node_role = hostvars[host]['rke2_node_role'] | default('node', true) %}\
+  {% if ( _rke2_node_role == 'server') %}\
+  {% if _rke2_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
   {% endif %}\
   {% endfor %}\
-  {{ _kube_servers }}"
+  {{ _rke2_servers }}"
