@@ -7,10 +7,12 @@ rke2_debug: false # A boolean to determine whether or not to turn on debug logs.
 rke2_data_dir: "/data" # Folder to hold state.
 rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
 rke2_egress_selector_mode: "agent" # Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
-rke2_disable_kube_proxy: false # Disable running kube-proxy.
+rke2_disable_kube_proxy: true # Disable running kube-proxy.
 rke2_disable_cloud_controller: true # Disable rke2 default cloud controller manager.
 rke2_disable: # Disable deploy packaged components, valid items: rke2-coredns, rke2-ingress-nginx, rke2-metrics-server.
   - "rke2-ingress-nginx"
+  - "rke2-metrics-server"
+  - "rke2-coredns"
 #rke2_server: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
 #rke2_node_extra_labels: # Defined node labels.
 #  - 'kubernetes.azure.com/cluster=""'
@@ -18,13 +20,13 @@ rke2_disable: # Disable deploy packaged components, valid items: rke2-coredns, r
 
 # Container Network Interface parameters #
 rke2_cni:
-  provider: "calico" # Specify the Kubernetes CNI plugins, one of none, calico, canal, cilium.
+  provider: "none" # Specify the Kubernetes CNI plugins, one of none, calico, canal, cilium.
   pod_cidr: "10.42.0.0/16" # Specify range of IP addresses for the pod network.
   srv_cidr: "10.43.0.0/16" # Use alternative range of IP address for service VIPs.
 
 # Kubelet parameters #
-rke2_kubelet_arg: [] # Specify the Kubelet's configuration parameters.
-#  - "cloud-provider=external"
+rke2_kubelet_arg: # Specify the Kubelet's configuration parameters.
+  - "cloud-provider=external"
 
 # Auditing parameters #
 kube_audit: # Specify the auditing configuration parameters.
@@ -36,15 +38,15 @@ kube_audit: # Specify the auditing configuration parameters.
 
 # Backup parameters #
 rke2_backup_arg:
-  s3: false # Enable backup to S3.
-  endpoint: "" # S3 endpoint url.
+  s3: true # Enable backup to S3.
+  endpoint: "storage:9000" # S3 endpoint url.
   retention: "5" # Number of snapshots to retain for days.
-  access_key: "JPTNJFUFB6UKLUXMRKZT" # S3 access key.
-  secret_key: "h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i" # S3 secret key.
+  access_key: "admin" # S3 access key.
+  secret_key: "password" # S3 secret key.
   bucket: "backup" # S3 bucket name.
   region: "us-east-1" # S3 region / bucket location.
   folder: "rke2" # S3 folder.
-  insecure: false # Disables S3 over HTTPS.
+  insecure: true # Disables S3 over HTTPS.
 
 # Components #
 #kube_components: # Individual Kubernetes components.

@@ -76,14 +76,21 @@ profile: cis
 
 # Agent/Node
 protect-kernel-defaults: true
+{% if ansible_selinux.status == 'disabled' %}
+selinux: false
+{% else %}
+selinux: true
+{% endif %}
 
 # Agent/Runtime
 system-default-registry: "{{ rke2_system_default_registry }}"
 
 # Agent/Flags
+{% if not rke2_disable_kube_proxy %}
 kube-proxy-arg:
   - proxy-mode=ipvs
   - ipvs-strict-arp=true
+{% endif %}
 {% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 0 %}
 kubelet-arg:
 {% for item in rke2_kubelet_arg %}

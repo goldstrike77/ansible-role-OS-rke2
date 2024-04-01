@@ -19,3 +19,8 @@ profile: cis
 
 # Node
 protect-kernel-defaults: true
+{% if ansible_selinux.status == 'disabled' %}
+selinux: false
+{% else %}
+selinux: true
+{% endif %}
