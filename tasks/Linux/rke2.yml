@@ -1,4 +1,18 @@
 ---
+- name: Create Containerd image directory.
+  file:
+    path: "{{ rke2_data_dir }}/containerd/logs"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0711"
+
+- name: Create containerd logs symbolic link.
+  file:
+    src: "{{ rke2_data_dir }}/containerd/logs"
+    dest: "/var/log/pods"
+    state: "link"
+
 - name: Create the etcd group.
   group:
     name: "etcd"
@@ -10,6 +24,20 @@
     group: "etcd"
     shell: "/sbin/nologin"
   when: rke2_node_role == "server"
+
+#- name: Create Rancher Kubernetes Engine v2 directory.
+#  file:
+#    path: "{{ rke2_data_dir }}/rancher"
+#    state: "directory"
+#    owner: "root"
+#    group: "root"
+#    mode: "0711"
+#
+#- name: Create Rancher Kubernetes Engine v2 symbolic link.
+#  file:
+#    src: "{{ rke2_data_dir }}/rancher"
+#    dest: "/var/lib/rancher"
+#    state: "link"
 
 - name: Install the Rancher Kubernetes Engine v2 packages.
   package:
@@ -31,6 +59,7 @@
     owner: "root"
     group: "root"
     mode: "0600"
+    backup: true
   when: rke2_node_role == "server"
   notify: Reloading the Server service.
 
@@ -39,7 +68,7 @@
     owner: "root"
     group: "root"
     mode: "0600"
-    force: "yes"
+    backup: true    
     src: "config-server.yaml"
     dest: "/etc/rancher/rke2/config.yaml"
   when: rke2_node_role == "server"
@@ -50,7 +79,7 @@
     owner: "root"
     group: "root"
     mode: "0600"
-    force: "yes"
+    backup: true
     src: "config-agent.yaml"
     dest: "/etc/rancher/rke2/config.yaml"
   when: rke2_node_role == "agent"

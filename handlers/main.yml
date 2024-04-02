@@ -1,11 +1,4 @@
 ---
-- name: Reloading the Containerd service.
-  systemd:
-    name: "containerd.service"
-    enabled: "yes"
-    state: "restarted"
-    daemon_reload: "yes"
-
 - name: Reloading the NetworkManager service.
   systemd:
     name: "NetworkManager.service"

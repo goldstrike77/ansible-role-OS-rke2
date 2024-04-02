@@ -22,7 +22,6 @@ rke2_network_rules_arg:
   - { protocol: "udp", port: "51820" } # Canal CNI with WireGuard IPv4
   - { protocol: "udp", port: "51821" } # Canal CNI with WireGuard IPv6/dual-stack
   - { protocol: "udp", port: "4789" } # Flannel CNI with VXLAN
-  - { protocol: "tcp", port: "1338" } # Containerd exporter.
 
 rke2_module_dependents:
   - "br_netfilter"

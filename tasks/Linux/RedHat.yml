@@ -2,16 +2,6 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_distribution_file_variety }}.yml"
 
-- name: Add Containerd YUM repositories.
-  yum_repository:
-    name: "{{ rke2_cri_containerd_repo_name }}"
-    description: "{{ rke2_cri_containerd_repo_name }} YUM repository"
-    file: "{{ rke2_cri_containerd_repo_name }}"
-    baseurl: "{{ rke2_cri_containerd_repo_url }}"
-    gpgcheck: "no"
-    sslverify: "no"
-    timeout: "60"
-
 - name: Add Rancher Kubernetes Engine v2 YUM repositories.
   yum_repository:
     name: "{{ item.name }}"

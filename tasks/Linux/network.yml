@@ -10,7 +10,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  notify: Reloading the Containerd service.
+  notify: Reloading the NetworkManager service.
   when:
     - services_state.ansible_facts.services["NetworkManager.service"] is defined
     - services_state.ansible_facts.services["NetworkManager.service"].state == 'running'
@@ -34,13 +34,13 @@
         state: "enabled"
         immediate: "true"
       loop: "{{ rke2_network_rules_arg }}"
-    - name: Enable IP masquerading.
-      firewalld:
-        masquerade: "yes"
-        state: "enabled"
-        permanent: "yes"
-        zone: "public"
-        immediate: "true"
+#    - name: Enable IP masquerading.
+#      firewalld:
+#        masquerade: "yes"
+#        state: "enabled"
+#        permanent: "yes"
+#        zone: "public"
+#        immediate: "true"
   when:
     - services_state.ansible_facts.services["firewalld.service"] is defined
     - services_state.ansible_facts.services["firewalld.service"].state == 'running'

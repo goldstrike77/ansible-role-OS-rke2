@@ -8,12 +8,6 @@
 - name: Include firewall tasks.
   ansible.builtin.include_tasks: "{{ ansible_system }}/network.yml"
 
-- name: Include containerd tasks.
-  ansible.builtin.include_tasks: "{{ ansible_system }}/containerd.yml"
-
-- name: Force the handler to run immediately.
-  meta: flush_handlers
-
 #- name: Check if already been initialized.
 #  stat:
 #    path: "/etc/rancher/rke2/rke2-pss.yaml"

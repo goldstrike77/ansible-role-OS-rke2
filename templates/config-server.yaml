@@ -75,6 +75,8 @@ disable:
 profile: cis
 
 # Agent/Node
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
 protect-kernel-defaults: true
 {% if ansible_selinux.status == 'disabled' %}
 selinux: false
