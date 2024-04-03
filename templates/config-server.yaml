@@ -65,7 +65,7 @@ kube-scheduler-arg:
 disable-kube-proxy: {{ rke2_disable_kube_proxy | default(false) | bool }}
 disable-cloud-controller: {{ rke2_disable_cloud_controller | default(false) | bool }}
 disable:
-{% if rke2_disable is defined %}
+{% if rke2_disable is defined and rke2_disable | length > 0 %}
 {% for item in rke2_disable %}
   - "{{ item }}"
 {% endfor %}
@@ -75,10 +75,20 @@ disable:
 profile: cis
 
 # Agent/Node
+node-label:
+  - "environments={{ environments }}"
+  - "datacenter={{ datacenter }}"
+  - "domain={{ domain }}"
+  - "customer={{ customer }}"
+{% if rke2_node_extra_labels is defined and rke2_node_extra_labels | length > 0 %}
+{% for item in rke2_node_extra_labels %}
+  - "{{ item }}"
+{% endfor %}
+{% endif %}
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 protect-kernel-defaults: true
-{% if ansible_selinux.status == 'disabled' %}
+{% if ansible_selinux.status == "disabled" %}
 selinux: false
 {% else %}
 selinux: true
