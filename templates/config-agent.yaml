@@ -1,6 +1,5 @@
 # Common
 debug: {{ rke2_debug | default(false) | bool }}
-data-dir: "{{ rke2_data_dir }}/rke2"
 
 # Cluster
 token: '{{ lookup("password", "" + rke2_servers[0] + ":rke2 length=16 chars=ascii_letters,digits") }}'
@@ -20,8 +19,8 @@ profile: cis
 # Node
 node-label:
   - "environments={{ environments }}"
-  - "datacenter={{ datacenter }}"
-  - "domain={{ domain }}"
+  - "project={{ project }}"
+  - "group={{ group }}"
   - "customer={{ customer }}"
 {% if rke2_node_extra_labels is defined and rke2_node_extra_labels | length > 0 %}
 {% for item in rke2_node_extra_labels %}

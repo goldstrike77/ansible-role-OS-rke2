@@ -40,12 +40,3 @@
     sysctl_file: "/etc/sysctl.d/20-sysctl.conf"
   loop: "{{ rke2_kernel_parameters }}"
   when: item.create | default(true) | bool
-
-- name: Create Directory to save etcd snapshots.
-  file:
-    dest: "{{ rke2_data_dir }}/snapshots"
-    state: "directory"
-    owner: "root"
-    group: "root"
-    mode: "0755"
-  when: rke2_node_role == "server"

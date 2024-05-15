@@ -1,6 +1,5 @@
 # Common
 debug: {{ rke2_debug | default(false) | bool }}
-data-dir: "{{ rke2_data_dir }}/rke2"
 
 # Listener
 tls-san:
@@ -16,7 +15,7 @@ cluster-cidr: {{ rke2_cni.pod_cidr | default("10.42.0.0/16") }}
 service-cidr: {{ rke2_cni.srv_cidr | default("10.43.0.0/16") }}
 cluster-domain: "{{ rke2_cluster_domain | default('cluster.local') }}"
 egress-selector-mode: "{{ rke2_egress_selector_mode | default('agent') }}"
-cni: "{{ rke2_cni.provider | default('cilium') }}"
+cni: "{{ rke2_cni.provider | default('calico') }}"
 
 # Client
 write-kubeconfig: "/etc/rancher/rke2/rke2.yaml"
@@ -31,31 +30,30 @@ server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rk
 # Database
 etcd-expose-metrics: true
 etcd-snapshot-schedule-cron: "{{ ( rke2_servers[0] | hash | list | map('int',0,16) | sum ) % 60 }} * * * *"
-etcd-snapshot-retention: {{ rke2_backup_arg.keep | default(5) }}
-etcd-snapshot-dir: "{{ rke2_data_dir }}/snapshots"
-{% if rke2_backup_arg.s3 | bool %}
+etcd-snapshot-retention: {{ rke2_backup.keep | default(5) }}
+{% if rke2_backup.s3 | bool %}
 etcd-s3: true
-etcd-s3-endpoint: "{{ rke2_backup_arg.endpoint }}"
+etcd-s3-endpoint: "{{ rke2_backup.endpoint }}"
 etcd-s3-skip-ssl-verify: true
-etcd-s3-access-key: "{{ rke2_backup_arg.access_key }}"
-etcd-s3-secret-key: "{{ rke2_backup_arg.secret_key }}"
-etcd-s3-bucket: "{{ rke2_backup_arg.bucket }}"
-etcd-s3-region: "{{ rke2_backup_arg.region | default('us-east-1') }}"
-etcd-s3-folder:	"{{ rke2_backup_arg.folder }}"
-etcd-s3-insecure: {{ rke2_backup_arg.insecure | default(false) | bool }}
-etcd-s3-timeout: {{ rke2_backup_arg.timeout | default("5m0s") }}
+etcd-s3-access-key: "{{ rke2_backup.access_key }}"
+etcd-s3-secret-key: "{{ rke2_backup.secret_key }}"
+etcd-s3-bucket: "{{ rke2_backup.bucket }}"
+etcd-s3-region: "{{ rke2_backup.region | default('us-east-1') }}"
+etcd-s3-folder:	"{{ rke2_backup.folder }}"
+etcd-s3-insecure: {{ rke2_backup.insecure | default(false) | bool }}
+etcd-s3-timeout: {{ rke2_backup.timeout | default("5m0s") }}
 {% endif %}
 
 # Flags
 kube-apiserver-arg:
-  - audit-log-maxage=20
-  - audit-log-maxbackup=20
-  - audit-log-maxsize=100
+  - audit-log-maxage={{ rke2_kube_audit.logmaxage | default("20") }}
+  - audit-log-maxbackup={{ rke2_kube_audit.logmaxbackup | default("10") }}
+  - audit-log-maxsize={{ rke2_kube_audit.logmaxsize | default("100") }}
   - audit-log-truncate-enabled=true
-  - audit-log-truncate-max-batch-size=32768
-  - audit-log-truncate-max-event-size=32768
+  - audit-log-truncate-max-batch-size={{ rke2_kube_audit.logtruncatemaxbatchsize | default("32768") }}
+  - audit-log-truncate-max-event-size={{ rke2_kube_audit.logtruncatemaxeventsize | default("32768") }}
 etcd-arg:
-  - quota-backend-bytes=8589934592
+  - quota-backend-bytes=6442450944
 kube-controller-manager-arg:
   - bind-address=0.0.0.0
 kube-scheduler-arg:
@@ -77,8 +75,8 @@ profile: cis
 # Agent/Node
 node-label:
   - "environments={{ environments }}"
-  - "datacenter={{ datacenter }}"
-  - "domain={{ domain }}"
+  - "project={{ project }}"
+  - "group={{ group }}"
   - "customer={{ customer }}"
 {% if rke2_node_extra_labels is defined and rke2_node_extra_labels | length > 0 %}
 {% for item in rke2_node_extra_labels %}
