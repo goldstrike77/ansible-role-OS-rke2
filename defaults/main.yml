@@ -18,6 +18,10 @@ rke2_node_extra_labels: # Defined node labels.
   - 'cluster=rke-{{ customer }}-{{ environments }}-{{ project }}-{{ group }}-01'
 #  - 'longhorn/node=true'
 
+# Role dependencies #
+rke2_haproxy_dept: false # A boolean to determine whether or not use HAProxy as a load balancer.
+rke2_haproxy_proxy_args: [] # Specify Essential configuration sections.
+
 # Container Network Interface parameters #
 rke2_cni:
   provider: "calico" # Specify the Kubernetes CNI plugins, one of none, calico, canal, cilium.

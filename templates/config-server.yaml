@@ -2,6 +2,7 @@
 debug: {{ rke2_debug | default(false) | bool }}
 
 # Listener
+bind-address: {{ ansible_default_ipv4.address }}
 tls-san:
 {% for item in rke2_servers %}
   - "{{ item }}"
@@ -94,6 +95,9 @@ selinux: true
 
 # Agent/Runtime
 system-default-registry: "{{ rke2_system_default_registry }}"
+
+# Agent/Networking
+node-external-ip: {{ ansible_default_ipv4.address }}
 
 # Agent/Flags
 {% if not rke2_disable_kube_proxy %}
