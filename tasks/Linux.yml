@@ -1,4 +1,16 @@
 ---
+- name: Role dependencies.
+  include_role:
+    name: "ansible-role-linux-haproxy"
+  vars:
+    haproxy_keepalived_dept: true
+    haproxy_keepalived_vip: "{{ rke2_server }}"
+    haproxy_servers: "{{ rke2_servers }}"
+    haproxy_proxy_args: "{{ rke2_haproxy_proxy_args }}"
+  when:
+    - rke2_haproxy_dept | bool
+    - rke2_node_role == "server"
+
 - name: Include tasks for specific Linux release.
   ansible.builtin.include_tasks: "{{ ansible_system }}/{{ ansible_distribution_file_variety }}.yml"
 

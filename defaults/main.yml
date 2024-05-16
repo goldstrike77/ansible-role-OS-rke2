@@ -14,13 +14,36 @@ rke2_disable: # Disable deploy packaged components, valid items: rke2-canal, rke
   - "rke2-ingress-nginx"
   - "rke2-metrics-server"
 #rke2_server: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
-rke2_node_extra_labels: # Defined node labels.
-  - 'cluster=rke-{{ customer }}-{{ environments }}-{{ project }}-{{ group }}-01'
+rke2_node_extra_labels: [] # Defined node labels.
 #  - 'longhorn/node=true'
 
 # Role dependencies #
 rke2_haproxy_dept: false # A boolean to determine whether or not use HAProxy as a load balancer.
 rke2_haproxy_proxy_args: [] # Specify Essential configuration sections.
+#  - name: "k8s-api"
+#    port: "6443"
+#    syntax:
+#      - "listen k8s-api-6443"
+#      - "  bind {{ rke2_server }}:6443"
+#      - "  mode tcp"
+#      - "  option tcp-check"
+#      - "  balance roundrobin"
+#      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 256 maxqueue 256 weight 100"
+#      - "  server master1 192.168.0.151:6443 check"
+#      - "  server master2 192.168.0.152:6443 check"
+#      - "  server master3 192.168.0.152:6443 check"
+#  - name: "rke2-server"
+#    port: "9345"
+#    syntax:
+#      - "listen rke2-server-9345"
+#      - "  bind {{ rke2_server }}:9345"
+#      - "  mode tcp"
+#      - "  option httpchk GET /v1-rke2/readyz HTTP/1.0"
+#      - "  balance roundrobin"
+#      - "  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 256 maxqueue 256 weight 100"
+#      - "  server master1 192.168.0.151:9345 check"
+#      - "  server master2 192.168.0.152:9345 check"
+#      - "  server master3 192.168.0.152:9345 check"
 
 # Container Network Interface parameters #
 rke2_cni:
