@@ -40,7 +40,7 @@
     owner: "root"
     group: "root"
     mode: "0600"
-    backup: true    
+    backup: true
     src: "config-server.yaml"
     dest: "/etc/rancher/rke2/config.yaml"
   when: rke2_node_role == "server"
