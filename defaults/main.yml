@@ -6,21 +6,21 @@ rke2_node_role: "agent" # Type of nodes in cluster, server or agent.
 rke2_debug: false # A boolean to determine whether or not to turn on debug logs.
 rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
 rke2_egress_selector_mode: "agent" # Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
-rke2_disable_kube_proxy: false # Disable running kube-proxy.
-rke2_disable_cloud_controller: true # Disable rke2 default cloud controller manager.
+rke2_disable_kube_proxy: false # A boolean to determine whether or not to running kube-proxy.
+rke2_disable_cloud_controller: true # A boolean to determine whether or not to disable rke2 default cloud controller manager.
 rke2_disable: # Disable deploy packaged components, valid items: rke2-canal, rke2-coredns, rke2-ingress-nginx, rke2-metrics-server.
   - "rke2-canal"
   - "rke2-coredns"
   - "rke2-ingress-nginx"
   - "rke2-metrics-server"
-#rke2_server: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of Server to used to join a cluster.
+#rke2_server: '192.168.0.150' # The address or DNS name of Server to used to join a cluster.
 rke2_node_extra_labels: [] # Defined node labels.
 #  - 'longhorn/node=true'
 
 # Role dependencies #
 rke2_haproxy_dept: false # A boolean to determine whether or not use HAProxy as a load balancer.
-rke2_haproxy_api: "6444"
-rke2_haproxy_server: "9346"
+rke2_haproxy_api: "6444" # Specify the port to be used for the apiserver load-balancer.
+rke2_haproxy_server: "9346" # Specify the port to be used for the server load-balancer.
 rke2_haproxy_proxy_args: # Specify Essential configuration sections.
   - name: "k8s-api"
     port: "{{ rke2_haproxy_api }}"
