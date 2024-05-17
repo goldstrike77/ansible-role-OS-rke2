@@ -9,7 +9,7 @@ __Table of Contents__
 - [Overview](#overview)
 - [Requirements](#requirements)
   * [Operating systems](#operating-systems)
-  * [Prerequisites](#Prerequisites)
+  * [RKE2 versions](#rke2-versions)
 - [ Role variables](#Role-variables)
   * [Main Configuration](#Main-parameters)
   * [Other Configuration](#Other-parameters)
