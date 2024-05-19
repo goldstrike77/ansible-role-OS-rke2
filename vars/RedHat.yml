@@ -10,6 +10,6 @@ rke2_packages:
 - { name: "iproute-tc", create: '{{ ansible_distribution_major_version | int > 7 }}' }
 - { name: "iscsi-initiator-utils" }
 - { name: "nfs-utils" }
-- { name: "rke2-server-{{ rke2_version }}*", create: '{{ rke2_node_role | lower == "server" }}' }
-- { name: "rke2-agent-{{ rke2_version }}*", create: '{{ rke2_node_role | lower == "agent" }}' }
+- { name: "rke2-server-{{ rke2_version }}~rke2r1-0.el{{ ansible_distribution_major_version | int }}", create: '{{ rke2_node_role | lower == "server" }}' }
+- { name: "rke2-agent-{{ rke2_version }}~rke2r1-0.el{{ ansible_distribution_major_version | int }}", create: '{{ rke2_node_role | lower == "agent" }}' }
 - { name: "rke2-selinux" }
