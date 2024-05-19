@@ -50,7 +50,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `rke2_egress_selector_mode`: Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
 * `rke2_disable_kube_proxy`: A boolean to determine whether or not to running kube-proxy.
 * `rke2_disable_cloud_controller`: A boolean to determine whether or not to disable rke2 default cloud controller manager.
-* `rke2_disable`: Disable deploy packaged components, valid items: rke2-canal, rke2-coredns, rke2-ingress-nginx, rke2-metrics-server.
+* `rke2_disable`: Disable deploy packaged components.
 * `rke2_server`: The address or DNS name of Server to used to join a cluster.
 * `rke2_node_extra_labels`: Defined node labels.
 

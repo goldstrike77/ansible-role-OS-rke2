@@ -8,11 +8,14 @@ rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
 rke2_egress_selector_mode: "agent" # Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
 rke2_disable_kube_proxy: false # A boolean to determine whether or not to running kube-proxy.
 rke2_disable_cloud_controller: true # A boolean to determine whether or not to disable rke2 default cloud controller manager.
-rke2_disable: # Disable deploy packaged components, valid items: rke2-canal, rke2-coredns, rke2-ingress-nginx, rke2-metrics-server.
+rke2_disable: # Disable deploy packaged components.
   - "rke2-canal"
   - "rke2-coredns"
   - "rke2-ingress-nginx"
   - "rke2-metrics-server"
+  - "rke2-snapshot-controller"
+  - "rke2-snapshot-controller-crd"
+  - "rke2-snapshot-validation-webhook"
 #rke2_server: '192.168.0.150' # The address or DNS name of Server to used to join a cluster.
 rke2_node_extra_labels: [] # Defined node labels.
 #  - 'longhorn/node=true'
