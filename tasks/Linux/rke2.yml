@@ -1,4 +1,18 @@
 ---
+- name: Create containerd logs directory.
+  file:
+    path: "/var/lib/rancher/logs"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0711"
+
+- name: Create containerd logs symbolic link.
+  file:
+    src: "/var/lib/rancher/logs"
+    dest: "/var/log/pods"
+    state: "link"
+
 - name: Create the etcd group.
   group:
     name: "etcd"
