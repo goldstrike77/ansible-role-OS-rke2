@@ -1,4 +1,13 @@
 ---
+- name: Include tasks for specific Linux release.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/{{ ansible_distribution_file_variety }}.yml"
+
+- name: Include Network tasks.
+  ansible.builtin.include_tasks: "{{ ansible_system }}/network.yml"
+
+- name: Force the handler to run immediately.
+  meta: flush_handlers
+
 - name: Role dependencies.
   include_role:
     name: "ansible-role-linux-haproxy"
@@ -11,14 +20,8 @@
     - rke2_haproxy_dept | bool
     - rke2_node_role == "server"
 
-- name: Include tasks for specific Linux release.
-  ansible.builtin.include_tasks: "{{ ansible_system }}/{{ ansible_distribution_file_variety }}.yml"
-
 - name: Include configuration tasks.
   ansible.builtin.include_tasks: "{{ ansible_system }}/configuration.yml"
-
-- name: Include firewall tasks.
-  ansible.builtin.include_tasks: "{{ ansible_system }}/network.yml"
 
 - name: Check if already been initialized.
   stat:

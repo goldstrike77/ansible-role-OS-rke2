@@ -2,13 +2,15 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_distribution_file_variety }}.yml"
 
-- name: Add Rancher Kubernetes Engine v2 YUM repositories.
-  yum_repository:
+- name: Install the Kubernetes dependencies packages.
+  package:
     name: "{{ item.name }}"
-    description: "{{ item.name }} repo"
-    file: "{{ rke2_repo_name }}"
-    baseurl: "{{ item.url }}"
-    sslverify: "no"
-    gpgcheck: "no"
-    timeout: "60"
-  loop: "{{ rke2_repo_url }}"
+    state: "present"
+    validate_certs: "no"
+    disable_gpg_check: "yes"
+  loop: "{{ rke2_packages }}"
+  when: item.create | default(true) | bool
+  register: rke2_dept_package_status
+  until: rke2_dept_package_status is succeeded
+  retries: 5
+  delay: 2

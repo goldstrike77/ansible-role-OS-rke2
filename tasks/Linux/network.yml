@@ -17,6 +17,13 @@
 
 - name: Firewalld operation.
   block:
+    - name: Enable Firewalld service disabled.
+      systemd:
+        name: "firewalld.service"
+        enabled: "no"
+        state: "stopped"
+        daemon_reload: "yes"
+      when: rke2_cni.provider != "cilium"
     - name: Allow Kubernetes control plane traffic.
       firewalld:
         port: "{{ item.port }}/{{ item.protocol }}"
@@ -25,7 +32,9 @@
         state: "enabled"
         immediate: "true"
       loop: "{{ rke2_server_network_rules_arg }}"
-      when: rke2_node_role == "server"
+      when:
+        - rke2_node_role == "server"
+        - rke2_cni.provider == "cilium"
     - name: Allow Kubernetes node traffic.
       firewalld:
         port: "{{ item.port }}/{{ item.protocol }}"
@@ -34,6 +43,7 @@
         state: "enabled"
         immediate: "true"
       loop: "{{ rke2_network_rules_arg }}"
+      when: rke2_cni.provider == "cilium"
   when:
     - services_state.ansible_facts.services["firewalld.service"] is defined
     - services_state.ansible_facts.services["firewalld.service"].state == 'running'

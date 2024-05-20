@@ -1,11 +1,12 @@
 ---
-- name: Create containerd logs directory.
+- name: Create Kubernetes state directory.
   file:
-    path: "/var/lib/rancher/logs"
+    path: "{{ item }}"
     state: "directory"
     owner: "root"
     group: "root"
     mode: "0711"
+  loop: ["/var/lib/rancher/logs", "/var/lib/rancher/rke2", "/etc/rancher/rke2"]
 
 - name: Create containerd logs symbolic link.
   file:
@@ -26,17 +27,17 @@
   when: rke2_node_role == "server"
 
 - name: Install the Rancher Kubernetes Engine v2 packages.
-  package:
-    name: "{{ item.name }}"
-    state: "present"
+  unarchive:
+    src: "{{ rke2_tarball_url }}/v{{ rke2_version }}-rke2r1/rke2.linux-amd64.tar.gz"
+    dest: "/usr/local"
+    owner: "root"
+    group: "root"
+    remote_src: "yes"
     validate_certs: "no"
-    disable_gpg_check: "yes"
-  loop: "{{ rke2_packages }}"
-  when: item.create | default(true) | bool
-  register: package_status
-  until: package_status is succeeded
-  retries: 5
-  delay: 2
+  register: rke2_package_status
+  until: rke2_package_status is succeeded
+  retries: 3
+  delay: 5
 
 - name: Transfer API Server audit configuration file.
   copy:

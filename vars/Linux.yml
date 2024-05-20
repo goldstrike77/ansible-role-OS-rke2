@@ -1,4 +1,6 @@
 ---
+rke2_tarball_url: "https://rancher-mirror.rancher.cn/rke2/releases/download"
+
 rke2_server_network_rules_arg:
   - { protocol: "tcp", port: "9345" } # RKE2 supervisor API
   - { protocol: "tcp", port: "6443" } # Kubernetes API
