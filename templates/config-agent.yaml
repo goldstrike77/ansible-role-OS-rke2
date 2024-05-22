@@ -6,11 +6,10 @@ token: '{{ lookup("password", "" + rke2_servers[0] + ":rke2 length=16 chars=asci
 server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rke2_servers[0] }}{% endif %}:{% if rke2_haproxy_dept | bool %}{{ rke2_haproxy_server | default('9346') }}{% else %}9345{% endif %}"
 
 # Components
-{% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 0 %}
 kubelet-arg:
-{% for item in rke2_kubelet_arg %}
-  - "{{ item }}"
-{% endfor %}
+  - "--config=/etc/rancher/rke2/kubeletconfig.yaml"
+{% if rke2_cloud_provider_external | bool %}
+  - "cloud-provider=external"
 {% endif %}
 
 # Security
