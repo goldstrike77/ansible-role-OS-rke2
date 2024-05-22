@@ -23,11 +23,11 @@
 - name: Include configuration tasks.
   ansible.builtin.include_tasks: "{{ ansible_system }}/configuration.yml"
 
-- name: Check if already been initialized.
-  stat:
-    path: "/etc/rancher/rke2/rke2-pss.yaml"
-  register: rke2_init_stat
+#- name: Check if already been initialized.
+#  stat:
+#    path: "/etc/rancher/rke2/rke2-pss.yaml"
+#  register: rke2_init_stat
 
 - name: Include Rancher Kubernetes Engine v2 tasks.
   ansible.builtin.include_tasks: "{{ ansible_system }}/rke2.yml"
-  when: not rke2_init_stat.stat.exists | bool
+#  when: not rke2_init_stat.stat.exists | bool

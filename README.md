@@ -50,6 +50,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `rke2_egress_selector_mode`: Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
 * `rke2_disable_kube_proxy`: A boolean to determine whether or not to running kube-proxy.
 * `rke2_disable_cloud_controller`: A boolean to determine whether or not to disable rke2 default cloud controller manager.
+* `rke2_cloud_provider_external`: A boolean to determine whether or not to specify that the cloud-provider is external.
 * `rke2_disable`: Disable deploy packaged components.
 * `rke2_server`: The address or DNS name of Server to used to join a cluster.
 * `rke2_node_extra_labels`: Defined node labels.
@@ -116,6 +117,7 @@ rke2_cluster_domain: "cluster.local"
 rke2_egress_selector_mode: "agent"
 rke2_disable_kube_proxy: false
 rke2_disable_cloud_controller: true
+rke2_cloud_provider_external: true
 rke2_disable:
   - "rke2-canal"
   - "rke2-coredns"
@@ -157,7 +159,17 @@ rke2_cni:
   pod_cidr: "10.42.0.0/16"
   srv_cidr: "10.43.0.0/16"
 rke2_kubelet_arg:
-  - "cloud-provider=external"
+  kubeapiburst: 100
+  kubeapiqps: 50
+  logmaxfiles: "10"
+  logmaxsize: "20Mi"
+  imagegchighthresholdpercent: "85"
+  imagegclowthresholdpercent: "80"
+  maxpods: "110"
+  serializeimagepulls: true
+  unsafesysctls:
+    - "net.core.somaxconn"
+    - "net.ipv4.ip_local_port_range"  
 rke2_kube_audit:
   logmaxage: "20"
   logmaxbackup: "10"

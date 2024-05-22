@@ -56,8 +56,11 @@
     group: "root"
     mode: "0600"
     backup: true
-    src: "config-server.yaml"
-    dest: "/etc/rancher/rke2/config.yaml"
+    src: "{{ item.src }}"
+    dest: "/etc/rancher/rke2/{{ item.dest }}"
+  loop:
+    - { src: "kubeletconfig.yaml", dest: "kubeletconfig.yaml" }
+    - { src: "config-server.yaml", dest: "config.yaml" }
   when: rke2_node_role == "server"
   notify: Reloading the Server service.
 

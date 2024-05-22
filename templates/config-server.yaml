@@ -97,14 +97,13 @@ selinux: true
 system-default-registry: "{{ rke2_system_default_registry }}"
 
 # Agent/Flags
+kubelet-arg:
+  - "--config=/etc/rancher/rke2/kubeletconfig.yaml"
+{% if rke2_cloud_provider_external | bool %}
+  - "cloud-provider=external"
+{% endif %}
 {% if not rke2_disable_kube_proxy %}
 kube-proxy-arg:
   - proxy-mode=ipvs
   - ipvs-strict-arp=true
-{% endif %}
-{% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 0 %}
-kubelet-arg:
-{% for item in rke2_kubelet_arg %}
-  - "{{ item }}"
-{% endfor %}
 {% endif %}

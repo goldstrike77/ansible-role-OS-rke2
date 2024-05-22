@@ -8,6 +8,7 @@ rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
 rke2_egress_selector_mode: "agent" # Specify the egress mode, One of 'agent', 'cluster', 'pod', 'disabled'.
 rke2_disable_kube_proxy: false # A boolean to determine whether or not to running kube-proxy.
 rke2_disable_cloud_controller: true # A boolean to determine whether or not to disable rke2 default cloud controller manager.
+rke2_cloud_provider_external: true # A boolean to determine whether or not to specify that the cloud-provider is external.
 rke2_disable: # Disable deploy packaged components.
   - "rke2-canal"
   - "rke2-coredns"
@@ -58,7 +59,17 @@ rke2_cni:
 
 # Kubelet parameters #
 rke2_kubelet_arg: # Specify the Kubelet's configuration parameters.
-  - "cloud-provider=external"
+  kubeapiburst: 100
+  kubeapiqps: 50
+  logmaxfiles: "10"
+  logmaxsize: "20Mi"
+  imagegchighthresholdpercent: "85"
+  imagegclowthresholdpercent: "80"
+  maxpods: "110"
+  serializeimagepulls: true
+  unsafesysctls:
+    - "net.core.somaxconn"
+    - "net.ipv4.ip_local_port_range"
 
 # Auditing parameters #
 rke2_kube_audit: # Specify the auditing configuration parameters.
