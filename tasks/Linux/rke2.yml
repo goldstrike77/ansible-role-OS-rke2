@@ -26,7 +26,7 @@
     shell: "/sbin/nologin"
   when: rke2_node_role == "server"
 
-- name: Install the Rancher Kubernetes Engine v2 packages.
+- name: Install the RKE2 packages.
   unarchive:
     src: "{{ rke2_tarball_url }}/v{{ rke2_version }}-rke2r1/rke2.linux-amd64.tar.gz"
     dest: "/usr/local"
@@ -50,30 +50,12 @@
   when: rke2_node_role == "server"
   notify: Reloading the Server service.
 
-- name: Transfer server configuration file.
+- name: Transfer RKE2 configuration file.
   template:
     owner: "root"
     group: "root"
     mode: "0600"
     backup: true
-    src: "{{ item.src }}"
-    dest: "/etc/rancher/rke2/{{ item.dest }}"
-  loop:
-    - { src: "kubeletconfig.yaml", dest: "kubeletconfig.yaml" }
-    - { src: "config-server.yaml", dest: "config.yaml" }
-  when: rke2_node_role == "server"
-  notify: Reloading the Server service.
-
-- name: Transfer agent configuration file.
-  template:
-    owner: "root"
-    group: "root"
-    mode: "0600"
-    backup: true
-    src: "{{ item.src }}"
-    dest: "/etc/rancher/rke2/{{ item.dest }}"
-  loop:
-    - { src: "kubeletconfig.yaml", dest: "kubeletconfig.yaml" }
-    - { src: "config-agent.yaml", dest: "config.yaml" }
-  when: rke2_node_role == "agent"
-  notify: Reloading the Agent service.
+    src: "config-{{ rke2_node_role }}.yaml"
+    dest: "/etc/rancher/rke2/config.yaml"
+  notify: Reloading the {{ rke2_node_role | title }} service.
