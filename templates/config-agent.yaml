@@ -3,7 +3,7 @@ debug: {{ rke2_debug | default(false) | bool }}
 
 # Cluster
 token: '{{ lookup("password", "rke2-cluster" + rke2_servers[0] + group_names[0] + ":rke2 length=16 chars=ascii_letters,digits") }}'
-server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rke2_servers[0] }}{% endif %}:{% if rke2_haproxy_dept | bool and rke2_servers | length > 1 %}{{ rke2_haproxy_server | default('9346') }}{% else %}9345{% endif %}"
+server: "https://{% if rke2_server is defined and rke2_servers | length > 1 %}{{ rke2_server }}{% else %}{{ rke2_servers[0] }}{% endif %}:{% if rke2_haproxy_dept | bool and rke2_servers | length > 1 %}{{ rke2_haproxy_server | default('9346') }}{% else %}9345{% endif %}"
 
 # Components
 {% if rke2_kubelet_arg is defined and rke2_kubelet_arg | length > 1 %}
