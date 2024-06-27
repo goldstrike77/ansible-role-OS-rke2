@@ -61,6 +61,18 @@ kube-scheduler-arg:
   - bind-address=0.0.0.0
 
 # Components
+control-plane-resource-requests:
+{% if rke2_control_plane_resource | length > 0 %}
+{% for item in rke2_control_plane_resource %}
+  - "{{ item }}"
+{% endfor %}
+{% endif%}
+control-plane-resource-limits:
+{% if rke2_control_plane_resource | length > 0 %}
+{% for item in rke2_control_plane_resource %}
+  - "{{ item }}"
+{% endfor %}
+{% endif%}
 disable-kube-proxy: {{ rke2_disable_kube_proxy | default(false) | bool }}
 disable-cloud-controller: {{ rke2_disable_cloud_controller | default(false) | bool }}
 disable:

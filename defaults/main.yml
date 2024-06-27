@@ -51,10 +51,23 @@ rke2_haproxy_proxy_args: # Specify Essential configuration sections.
       - "  server master3 192.168.0.152:9345 check"
 
 # Container Network Interface parameters #
-rke2_cni:
+rke2_cni: # Specify the Container Network Interface parameters.
   provider: "calico" # Specify the Kubernetes CNI plugins, one of none, calico, canal, cilium.
   pod_cidr: "10.42.0.0/16" # Specify range of IP addresses for the pod network.
   srv_cidr: "10.43.0.0/16" # Use alternative range of IP address for service VIPs.
+
+# Control Plane resource parameters #
+rke2_control_plane_resource: # Specify the Control Plane resource parameters.
+  - "etcd-cpu=500m"
+  - "etcd-memory=512Mi"
+  - "kube-apiserver-cpu=1000m"
+  - "kube-apiserver-memory=1024Mi"
+  - "kube-controller-manager-cpu=300m"
+  - "kube-controller-manager-memory=256Mi"
+  - "kube-proxy-cpu=300m"
+  - "kube-proxy-memory=256Mi"
+  - "kube-scheduler-cpu=300m"
+  - "kube-scheduler-memory=256Mi"
 
 # Kubelet parameters #
 rke2_kubelet_arg: # Specify the Kubelet configuration parameters.

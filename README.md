@@ -63,6 +63,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### CNI parameters
 * `rke2_cni`: Specify the Container Network Interface parameters.
 
+##### Control Plane resource parameters
+* `rke2_control_plane_resource`: Specify the Control Plane resource parameters.
+
 ##### Kubelet parameters
 * `rke2_kubelet_arg`: Specify the Kubelet's configuration parameters.
 
@@ -156,6 +159,17 @@ rke2_cni:
   provider: "calico"
   pod_cidr: "10.42.0.0/16"
   srv_cidr: "10.43.0.0/16"
+rke2_control_plane_resource:
+  - "etcd-cpu=500m"
+  - "etcd-memory=512Mi"
+  - "kube-apiserver-cpu=1000m"
+  - "kube-apiserver-memory=1024Mi"
+  - "kube-controller-manager-cpu=300m"
+  - "kube-controller-manager-memory=256Mi"
+  - "kube-proxy-cpu=300m"
+  - "kube-proxy-memory=256Mi"
+  - "kube-scheduler-cpu=300m"
+  - "kube-scheduler-memory=256Mi"
 rke2_kubelet_arg:
   - "allowed-unsafe-sysctls=kernel.shm*,kernel.msg*,kernel.sem,fs.mqueue.*,net.*"
   - "cloud-provider=external"
