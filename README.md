@@ -108,11 +108,11 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: all
       roles:
          - role: ansible-role-OS-rke2
-           rke2_version: "1.28.8"
+           rke2_version: "1.28.12"
 
 ### Combination of group vars and playbook
 ```yaml
-rke2_version: "1.28.8"
+rke2_version: "1.28.12"
 rke2_node_role: "agent"
 rke2_debug: false
 rke2_cluster_domain: "cluster.local"
@@ -192,7 +192,7 @@ rke2_kube_audit:
 rke2_backup:
   s3: true
   endpoint: "obs.home.local:9000"
-  retention: "5"
+  retention: "35"
   access_key: "admin"
   secret_key: "password"
   bucket: "backup"
