@@ -192,7 +192,7 @@ rke2_kube_audit:
 rke2_backup:
   s3: true
   endpoint: "obs.home.local:9000"
-  retention: "35"
+  retention: "360"
   access_key: "admin"
   secret_key: "password"
   bucket: "backup"

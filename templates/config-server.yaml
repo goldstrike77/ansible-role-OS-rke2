@@ -31,7 +31,7 @@ server: "https://{% if rke2_server is defined %}{{ rke2_server }}{% else %}{{ rk
 # Database
 etcd-expose-metrics: true
 etcd-snapshot-schedule-cron: "{{ ( rke2_servers[0] | hash | list | map('int',0,16) | sum ) % 60 }} * * * *"
-etcd-snapshot-retention: {{ rke2_backup.keep | default(5) }}
+etcd-snapshot-retention: {{ rke2_backup.retention | default(360) }}
 {% if rke2_backup.s3 | bool %}
 etcd-s3: true
 etcd-s3-endpoint: "{{ rke2_backup.endpoint }}"
