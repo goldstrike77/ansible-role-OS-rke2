@@ -61,13 +61,13 @@ rke2_control_plane_resource: # Specify the Control Plane resource parameters.
   - "etcd-cpu=500m"
   - "etcd-memory=1024Mi"
   - "kube-apiserver-cpu=1000m"
-  - "kube-apiserver-memory=2048Mi"
+  - "kube-apiserver-memory=3072Mi"
   - "kube-controller-manager-cpu=300m"
-  - "kube-controller-manager-memory=256Mi"
+  - "kube-controller-manager-memory=512Mi"
   - "kube-proxy-cpu=300m"
   - "kube-proxy-memory=256Mi"
   - "kube-scheduler-cpu=300m"
-  - "kube-scheduler-memory=256Mi"
+  - "kube-scheduler-memory=512Mi"
 
 # Kubelet parameters #
 rke2_kubelet_arg: # Specify the Kubelet configuration parameters.
