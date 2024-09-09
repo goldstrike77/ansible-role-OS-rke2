@@ -1,5 +1,5 @@
 # Common
-debug: {{ rke2_debug | default(false) | bool }}
+debug: {{ rke2_debug | default(false) | bool | lower }}
 
 # Listener
 bind-address: {{ ansible_default_ipv4.address }}
@@ -41,7 +41,7 @@ etcd-s3-secret-key: "{{ rke2_backup.secret_key }}"
 etcd-s3-bucket: "{{ rke2_backup.bucket }}"
 etcd-s3-region: "{{ rke2_backup.region | default('us-east-1') }}"
 etcd-s3-folder:	"{{ rke2_backup.folder }}"
-etcd-s3-insecure: {{ rke2_backup.insecure | default(false) | bool }}
+etcd-s3-insecure: {{ rke2_backup.insecure | default(false) | bool | lower }}
 etcd-s3-timeout: {{ rke2_backup.timeout | default("5m0s") }}
 {% endif %}
 
@@ -73,8 +73,8 @@ control-plane-resource-limits:
   - "{{ item }}"
 {% endfor %}
 {% endif%}
-disable-kube-proxy: {{ rke2_disable_kube_proxy | default(false) | bool }}
-disable-cloud-controller: {{ rke2_disable_cloud_controller | default(false) | bool }}
+disable-kube-proxy: {{ rke2_disable_kube_proxy | default(false) | bool | lower }}
+disable-cloud-controller: {{ rke2_disable_cloud_controller | default(false) | bool | lower }}
 disable:
 {% if rke2_disable is defined and rke2_disable | length > 0 %}
 {% for item in rke2_disable %}

@@ -95,14 +95,14 @@ rke2_kube_audit: # Specify the auditing configuration parameters.
 # Backup parameters #
 rke2_backup:
   s3: true # Enable backup to S3.
-  endpoint: "obs.home.local:9000" # S3 endpoint url.
+  endpoint: "obs.home.local" # S3 endpoint url.
   retention: "360" # Number of snapshots to retain for days.
   access_key: "admin" # S3 access key.
   secret_key: "password" # S3 secret key.
   bucket: "backup" # S3 bucket name.
   region: "us-east-1" # S3 region / bucket location.
   folder: "rke-it-prd-shared-toolchain-01" # S3 folder.
-  insecure: true # Disables S3 over HTTPS.
+  insecure: false # Disables S3 over HTTPS.
 
 # Service Mesh #
 customer: "it" # Define the customer name.
