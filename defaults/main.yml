@@ -1,7 +1,7 @@
 ---
 # General parameters #
 rke2_is_install: false # A boolean to determine whether or not to install the Rancher Kubernetes Engine v2.
-rke2_version: "1.28.12" # Specify the Rancher Kubernetes Engine v2 version.
+rke2_version: "1.28.13" # Specify the Rancher Kubernetes Engine v2 version.
 rke2_node_role: "agent" # Type of nodes in cluster, server or agent.
 rke2_debug: false # A boolean to determine whether or not to turn on debug logs.
 rke2_cluster_domain: "cluster.local" # Specify the Cluster Domain.
@@ -58,16 +58,16 @@ rke2_cni: # Specify the Container Network Interface parameters.
 
 # Control Plane resource parameters #
 rke2_control_plane_resource: # Specify the Control Plane resource parameters.
-  - "etcd-cpu=500m"
-  - "etcd-memory=1024Mi"
-  - "kube-apiserver-cpu=1000m"
-  - "kube-apiserver-memory=3072Mi"
-  - "kube-controller-manager-cpu=300m"
-  - "kube-controller-manager-memory=512Mi"
-  - "kube-proxy-cpu=300m"
+  - "etcd-cpu=1000m"
+  - "etcd-memory=2048Mi"
+  - "kube-apiserver-cpu=2000m"
+  - "kube-apiserver-memory=4096Mi"
+  - "kube-controller-manager-cpu=1000m"
+  - "kube-controller-manager-memory=1024Mi"
+  - "kube-proxy-cpu=500m"
   - "kube-proxy-memory=256Mi"
-  - "kube-scheduler-cpu=300m"
-  - "kube-scheduler-memory=512Mi"
+  - "kube-scheduler-cpu=1000m"
+  - "kube-scheduler-memory=1024Mi"
 
 # Kubelet parameters #
 rke2_kubelet_arg: # Specify the Kubelet configuration parameters.
@@ -96,7 +96,7 @@ rke2_kube_audit: # Specify the auditing configuration parameters.
 rke2_backup:
   s3: true # Enable backup to S3.
   endpoint: "obs.home.local" # S3 endpoint url.
-  retention: "360" # Number of snapshots to retain for days.
+  retention: "360" # Number of snapshots to retain.
   access_key: "admin" # S3 access key.
   secret_key: "password" # S3 secret key.
   bucket: "backup" # S3 bucket name.

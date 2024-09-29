@@ -100,7 +100,7 @@ There are some variables in vars/main.yml:
 ### Hosts inventory file
 See tests/inventory for an example.
 
-    node01 ansible_host='192.168.1.10' rke2_version="1.28.8"
+    node01 ansible_host='192.168.1.10' rke2_version="1.28.13"
 
 ### Vars in role configuration
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
@@ -108,11 +108,11 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: all
       roles:
          - role: ansible-role-OS-rke2
-           rke2_version: "1.28.12"
+           rke2_version: "1.28.13"
 
 ### Combination of group vars and playbook
 ```yaml
-rke2_version: "1.28.12"
+rke2_version: "1.28.13"
 rke2_node_role: "agent"
 rke2_debug: false
 rke2_cluster_domain: "cluster.local"
